@@ -5,6 +5,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.TextArea;
 import java.awt.TextField;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -13,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.victorswelt.Article;
 import de.victorswelt.Author;
@@ -41,9 +51,43 @@ public class ArticleEditorPane extends JPanel {
 		authors = new JComboBox<Author>();
 		
 		// add the authors
+		authors.addItem(AuthorList.getInstance().getAuthor(-1));
 		for(Author a : AuthorList.getInstance().getAuthors()) {
 			authors.addItem(a);
 		}
+		
+		// add the listeners
+		title.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				System.out.println(content.getText());
+			}
+		});
+		
+		content.addTextListener(new TextListener() {
+			public void textValueChanged(TextEvent e) {
+				System.out.println(content.getText());
+			}
+		});
+		
+		authors.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				System.out.println(authors.getSelectedItem());
+			}
+		});
 		
 		// populate the JPanel
 		add(createLabelComponentPair("Author: ", authors));
@@ -53,6 +97,11 @@ public class ArticleEditorPane extends JPanel {
 		
 		// finalize the initialization by setting the current article to none
 		setArticle(null);
+		Article a = new Article();
+		a.setAuthor(AuthorList.getInstance().getAuthor(-1));
+		a.setContent("Lorem Ipsum Dolor sit amet");
+		a.setTitle("Lorem Ipsum!");
+		setArticle(a);
 	}
 	
 	public void setArticle(Article a) {
@@ -67,6 +116,10 @@ public class ArticleEditorPane extends JPanel {
 			title.setEnabled(true);
 			authors.setEnabled(true);
 			content.setEnabled(true);
+			
+			title.setText(a.getTitle());
+			authors.setSelectedItem(a.getAuthor());
+			content.setText(a.getContent());
 		}
 	}
 	
