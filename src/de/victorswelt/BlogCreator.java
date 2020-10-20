@@ -7,8 +7,8 @@ import de.victorswelt.ui.ArticleEditorPane;
 public class BlogCreator {
 	public static void main(String args[]) {
 		// initialize the singletons
-		ArticleList.init();
 		AuthorList.init();
+		ArticleList.init();
 		
 		new BlogCreator();
 	}
