@@ -3,11 +3,8 @@ package de.victorswelt.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.TextArea;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -21,6 +18,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.victorswelt.Article;
+import de.victorswelt.ArticleList;
 import de.victorswelt.Author;
 import de.victorswelt.AuthorList;
 
@@ -101,11 +99,7 @@ public class ArticleEditorPane extends JPanel {
 		
 		// finalize the initialization by setting the current article to none
 		setArticle(null);
-		Article a = new Article();
-		a.setAuthor(AuthorList.getInstance().getAuthor(-1));
-		a.setContent("Lorem Ipsum Dolor sit amet");
-		a.setTitle("Lorem Ipsum!");
-		setArticle(a);
+		setArticle(ArticleList.getInstance().getArticles().get(1));
 	}
 	
 	public void setArticle(Article a) {
