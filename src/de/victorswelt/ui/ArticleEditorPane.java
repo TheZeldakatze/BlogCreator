@@ -56,26 +56,30 @@ public class ArticleEditorPane extends JPanel {
 		// add the listeners
 		title.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				
+				if(currentArticle != null)
+					currentArticle.setTitle(title.getText());
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				
+				if(currentArticle != null)
+					currentArticle.setTitle(title.getText());
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
 				if(currentArticle != null)
-					currentArticle.setTitle(content.getText());
+					currentArticle.setTitle(title.getText());
 			}
 		});
 		
 		content.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				
+				if(currentArticle != null)
+					currentArticle.setContent(content.getText());
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				
+				if(currentArticle != null)
+					currentArticle.setContent(content.getText());
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
