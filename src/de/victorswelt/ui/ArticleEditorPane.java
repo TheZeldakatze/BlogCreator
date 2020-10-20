@@ -35,7 +35,6 @@ public class ArticleEditorPane extends JPanel {
 	private JComboBox<Author> authors;
 	private TextArea content;
 	
-	
 	public ArticleEditorPane() {
 		// set the layout
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -58,34 +57,31 @@ public class ArticleEditorPane extends JPanel {
 		
 		// add the listeners
 		title.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void changedUpdate(DocumentEvent e) {
-				System.out.println(content.getText());
+				if(currentArticle != null)
+					currentArticle.setTitle(content.getText());
 			}
 		});
 		
 		content.addTextListener(new TextListener() {
 			public void textValueChanged(TextEvent e) {
-				System.out.println(content.getText());
+				if(currentArticle != null)
+					currentArticle.setContent(content.getText());
 			}
 		});
 		
 		authors.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(authors.getSelectedItem());
+				if(currentArticle != null)
+					currentArticle.setAuthor((Author) authors.getSelectedItem());
 			}
 		});
 		
