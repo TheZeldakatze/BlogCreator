@@ -7,6 +7,12 @@ public class ArticleList {
 	
 	private ArticleList() {
 		articleList = new ArrayList<Article>();
+		
+		// create some test articles
+		// TODO remove
+		articleList.add(new Article(AuthorList.getInstance().getAuthor(0), "Lorem Ipsum", "Lorem ipsum dolor sit amet"));
+		articleList.add(new Article(AuthorList.getInstance().getAuthor(1), "The red fox", "The red fox jumps over the brown bear"));
+		articleList.add(new Article(AuthorList.getInstance().getAuthor(2), "I like trains", "I like trains. Trains are cool."));
 	}
 	
 	public void addArticle(Article a) {
