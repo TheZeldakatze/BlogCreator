@@ -13,6 +13,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -29,7 +31,7 @@ public class ArticleEditorPane extends JPanel {
 	
 	private JTextField title;
 	private JComboBox<Author> authors;
-	private TextArea content;
+	private JTextArea content;
 	
 	public ArticleEditorPane() {
 		// set the layout
@@ -39,9 +41,11 @@ public class ArticleEditorPane extends JPanel {
 		title = new JTextField();
 		title.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		
-		content = new TextArea();
+		content = new JTextArea();
 		content.setBackground(Color.WHITE);
 		content.setSize(640, 480);
+		content.setLineWrap(true);
+		content.setAutoscrolls(true);
 		
 		authors = new JComboBox<Author>();
 		
@@ -67,8 +71,16 @@ public class ArticleEditorPane extends JPanel {
 			}
 		});
 		
-		content.addTextListener(new TextListener() {
-			public void textValueChanged(TextEvent e) {
+		content.getDocument().addDocumentListener(new DocumentListener() {
+			public void removeUpdate(DocumentEvent e) {
+				
+			}
+			
+			public void insertUpdate(DocumentEvent e) {
+				
+			}
+			
+			public void changedUpdate(DocumentEvent e) {
 				if(currentArticle != null)
 					currentArticle.setContent(content.getText());
 			}
@@ -85,7 +97,7 @@ public class ArticleEditorPane extends JPanel {
 		add(createLabelComponentPair("Author: ", authors));
 		add(createLabelComponentPair("Title: ", title));
 		add(new JLabel("Content: "));
-		add(content);
+		((JScrollPane) add(new JScrollPane(content))).setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		// finalize the initialization by setting the current article to none
 		setArticle(null);
