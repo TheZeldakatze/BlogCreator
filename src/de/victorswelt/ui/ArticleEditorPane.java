@@ -4,13 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.TextArea;
-import java.awt.TextField;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 
@@ -18,7 +13,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -29,6 +23,8 @@ import de.victorswelt.Author;
 import de.victorswelt.AuthorList;
 
 public class ArticleEditorPane extends JPanel {
+	private static final long serialVersionUID = 1L;
+
 	private Article currentArticle;
 	
 	private JTextField title;
