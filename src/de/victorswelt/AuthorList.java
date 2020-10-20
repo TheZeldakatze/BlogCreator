@@ -3,7 +3,7 @@ package de.victorswelt;
 import java.util.ArrayList;
 
 public class AuthorList {
-	private static final Author NO_AUTHOR = new Author(Integer.MIN_VALUE, "No Author / Deleted");
+	public static final Author NO_AUTHOR = new Author(Integer.MIN_VALUE, "No Author / Deleted");
 	private ArrayList<Author> authors;
 	
 	public AuthorList() {
