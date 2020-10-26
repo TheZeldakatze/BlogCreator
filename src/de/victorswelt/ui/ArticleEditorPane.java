@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -30,6 +31,8 @@ public class ArticleEditorPane extends JPanel {
 	private JTextField title;
 	private JComboBox<Author> authors;
 	private JTextArea content;
+	private JPanel datePanel;
+	private JLabel created, lastEdited;
 	
 	public ArticleEditorPane() {
 		// set the layout
@@ -47,6 +50,13 @@ public class ArticleEditorPane extends JPanel {
 		
 		authors = new JComboBox<Author>();
 		
+		datePanel = new JPanel();
+		datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.X_AXIS));
+		
+		created = new JLabel();
+		lastEdited = new JLabel();
+		updateTime(null, null);
+		
 		// add the authors
 		authors.addItem(AuthorList.getInstance().getAuthor(-1));
 		for(Author a : AuthorList.getInstance().getAuthors()) {
@@ -56,46 +66,64 @@ public class ArticleEditorPane extends JPanel {
 		// add the listeners
 		title.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setTitle(title.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setTitle(title.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setTitle(title.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 		});
 		
 		content.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setContent(content.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setContent(content.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setContent(content.getText());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 		});
 		
 		authors.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if(currentArticle != null)
+				if(currentArticle != null) {
 					currentArticle.setAuthor((Author) authors.getSelectedItem());
+					updateTime(currentArticle.getLastEdited());
+				}
 			}
 		});
 		
 		// populate the JPanel
+		datePanel.add(lastEdited);
+		datePanel.add(created);
+		
+		add(datePanel);
 		add(createLabelComponentPair("Author: ", authors));
 		add(createLabelComponentPair("Title: ", title));
 		add(new JLabel("Content: "));
@@ -114,6 +142,7 @@ public class ArticleEditorPane extends JPanel {
 			authors.setEnabled(false);
 			content.setEnabled(false);
 			authors.setSelectedItem(null);
+			updateTime(null, null);
 		} else {
 			title.setEnabled(true);
 			authors.setEnabled(true);
@@ -122,7 +151,26 @@ public class ArticleEditorPane extends JPanel {
 			title.setText(a.getTitle());
 			authors.setSelectedItem(a.getAuthor());
 			content.setText(a.getContent());
+			updateTime(a.getCreated(), a.getLastEdited());
 		}
+	}
+	
+	/** 
+	 * A convenience method to update the time fields */
+	private void updateTime(Date created, Date updated) {
+		if(created == null)
+			this.created.setText("Created: ---");
+		else
+			this.created.setText("Created: " + created.toString());
+		
+		updateTime(updated);
+	}
+	
+	private void updateTime(Date updated) {
+		if(updated == null)
+			this.lastEdited.setText("Last edit: ---");
+		else
+			this.lastEdited.setText("Last edit: " + updated.toString());
 	}
 	
 	/**
