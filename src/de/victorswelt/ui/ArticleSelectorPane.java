@@ -3,6 +3,7 @@ package de.victorswelt.ui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -57,7 +58,8 @@ public class ArticleSelectorPane extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Article a = new Article(AuthorList.NO_AUTHOR, "New Article", "");
+				Date d = new Date();
+				Article a = new Article(AuthorList.NO_AUTHOR, "New Article", d, new Date(d.getTime()), "");
 				ArticleList.getInstance().addArticle(a);
 				listModel.addElement(a);
 			}

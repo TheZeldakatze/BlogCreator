@@ -19,7 +19,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.victorswelt.Article;
-import de.victorswelt.ArticleList;
 import de.victorswelt.Author;
 import de.victorswelt.AuthorList;
 
@@ -131,7 +130,6 @@ public class ArticleEditorPane extends JPanel {
 		
 		// finalize the initialization by setting the current article to none
 		setArticle(null);
-		setArticle(ArticleList.getInstance().getArticles().get(1));
 	}
 	
 	public void setArticle(Article a) {

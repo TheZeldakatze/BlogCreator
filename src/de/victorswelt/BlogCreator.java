@@ -1,8 +1,5 @@
 package de.victorswelt;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
@@ -13,8 +10,8 @@ public class BlogCreator {
 	public static void main(String args[]) {
 		// initialize the singletons
 		AuthorList.init();
-		DatabaseManager.init();
 		ArticleList.init();
+		DatabaseManager.init();
 		
 		
 		new BlogCreator();

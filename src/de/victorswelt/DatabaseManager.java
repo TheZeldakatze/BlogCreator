@@ -1,18 +1,14 @@
 package de.victorswelt;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class DatabaseManager {
+	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E MM dd HH:mm:ss z yyyy");
 	private File websiteRoot, websiteInfoFile, articleFolder, authorFolder, templateFolder;
 	
 	private DatabaseManager() {
@@ -31,8 +27,42 @@ public class DatabaseManager {
 			if(!f.isDirectory())
 				loadAuthorFromFile(f);
 		}
+		
+		// load every article
+		for(File f : articleFolder.listFiles()) {
+			if(!f.isDirectory())
+				loadArticleFromFile(f);
+		}
 	}
 	
+	private void loadArticleFromFile(File f) {
+		try {
+			Properties p = new Properties();
+			
+			// load the article from the file
+			FileInputStream fis = new FileInputStream(f);
+			p.load(fis);
+			fis.close();
+			
+			// get the information
+			String title = p.getProperty("title");
+			int authorID = Integer.parseInt(p.getProperty("author"));
+			Author author = AuthorList.getInstance().getAuthor(authorID);
+			Date created = parseDate(p.getProperty("created"));
+			Date modified = parseDate(p.getProperty("modified"));
+			String content = p.getProperty("content");
+			
+			// create an object
+			ArticleList.getInstance().addArticle(new Article(author, title, created, modified, content));
+			
+		} catch(NumberFormatException e) {
+			System.out.println("Error loading article! Can't read author id (File name:  \"" + f.getName() + "\"). Printing stack trace:");
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void loadAuthorFromFile(File f) {
 		try {
 			Properties p = new Properties();
@@ -58,22 +88,26 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 	}
-
-	private Article createArticle(String base64) {
-		return null;
-	}
-	
-	private String packArticle(Article article) {
-		return null;
-	}
 	
 	/**
 	 * A utility function to access and, if they don't exist, create folders */
-	public File accessAndCreateFolder(File parent, String subfolder) {
+	private static File accessAndCreateFolder(File parent, String subfolder) {
 		File f = new File(parent, subfolder);
 		if(!f.exists())
 			f.mkdir();
 		return f;
+	}
+	
+	private static Date parseDate(String in) {
+		Date d = null;
+		
+		try {
+			d = DATE_FORMAT.parse(in);
+		} catch (ParseException e) {
+			// try initializing the input string as a millisecond time
+			d = new Date(Long.parseLong(in));
+		}
+		return d;
 	}
 	
 	// SINGLETON stuff

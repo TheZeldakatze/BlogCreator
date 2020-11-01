@@ -9,15 +9,16 @@ public class Article {
 	private String content;
 	
 	public Article() {
-		setCreated(new Date());
-		lastEdited = (Date) getCreated().clone();
+		
 	}
 	
-	public Article(Author author, String title, String content) {
+	public Article(Author author, String title, Date created, Date edited, String content) {
 		this();
 		
 		this.author = author;
 		this.title = title;
+		this.created = created;
+		this.lastEdited = edited;
 		this.content = content;
 	}
 	
