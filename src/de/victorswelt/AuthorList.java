@@ -8,10 +8,6 @@ public class AuthorList {
 	
 	public AuthorList() {
 		authors = new ArrayList<Author>();
-		
-		// TODO remove
-		addAuthor(new Author(1, "Jane Doe"));
-		addAuthor(new Author(2, "John Doe"));
 	}
 	
 	public void addAuthor(Author a) {
