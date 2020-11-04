@@ -7,6 +7,7 @@ public class Article {
 	private Author author;
 	private String title;
 	private String content;
+	private boolean edited = false;
 	
 	public Article() {
 		
@@ -55,6 +56,10 @@ public class Article {
 	public Date getLastEdited() {
 		return lastEdited;
 	}
+	
+	public boolean wasEdited() {
+		return edited;
+	}
 
 	public void setLastEdited(Date lastEdited) {
 		this.lastEdited = lastEdited;
@@ -65,6 +70,7 @@ public class Article {
 	}
 	
 	private void updateEditedTime() {
+		edited = true;
 		lastEdited.setTime(System.currentTimeMillis());
 	}
 }
