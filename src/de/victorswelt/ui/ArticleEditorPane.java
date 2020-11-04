@@ -3,11 +3,14 @@ package de.victorswelt.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +35,7 @@ public class ArticleEditorPane extends JPanel {
 	private JTextArea content;
 	private JPanel datePanel;
 	private JLabel created, lastEdited;
+	private JButton modify;
 	
 	public ArticleEditorPane() {
 		// set the layout
@@ -56,6 +60,8 @@ public class ArticleEditorPane extends JPanel {
 		lastEdited = new JLabel();
 		updateTime(null, null);
 		
+		modify = new JButton("modify");
+		
 		// add the authors
 		authors.addItem(AuthorList.getInstance().getAuthor(-1));
 		for(Author a : AuthorList.getInstance().getAuthors()) {
@@ -65,21 +71,19 @@ public class ArticleEditorPane extends JPanel {
 		// add the listeners
 		title.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
-					currentArticle.setTitle(title.getText());
-					updateTime(currentArticle.getLastEdited());
-				}
+				action();
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
-					currentArticle.setTitle(title.getText());
-					updateTime(currentArticle.getLastEdited());
-				}
+				action();
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
+				action();
+			}
+			
+			private void action() {
+				if(currentArticle != null && title.isEnabled()) {
 					currentArticle.setTitle(title.getText());
 					updateTime(currentArticle.getLastEdited());
 				}
@@ -88,21 +92,19 @@ public class ArticleEditorPane extends JPanel {
 		
 		content.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
-					currentArticle.setContent(content.getText());
-					updateTime(currentArticle.getLastEdited());
-				}
+				action();
 			}
 			
 			public void insertUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
-					currentArticle.setContent(content.getText());
-					updateTime(currentArticle.getLastEdited());
-				}
+				action();
 			}
 			
 			public void changedUpdate(DocumentEvent e) {
-				if(currentArticle != null) {
+				action();
+			}
+			
+			private void action() {
+				if(currentArticle != null && content.isEnabled()) {
 					currentArticle.setContent(content.getText());
 					updateTime(currentArticle.getLastEdited());
 				}
@@ -111,16 +113,28 @@ public class ArticleEditorPane extends JPanel {
 		
 		authors.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if(currentArticle != null) {
+				if(currentArticle != null && authors.isEnabled()) {
 					currentArticle.setAuthor((Author) authors.getSelectedItem());
 					updateTime(currentArticle.getLastEdited());
 				}
 			}
 		});
 		
+		modify.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				title.setEnabled(true);
+				authors.setEnabled(true);
+				content.setEnabled(true);
+				modify.setEnabled(false);
+			}
+			
+		});
+		
 		// populate the JPanel
 		datePanel.add(lastEdited);
 		datePanel.add(created);
+		datePanel.add(modify);
 		
 		add(datePanel);
 		add(createLabelComponentPair("Author: ", authors));
@@ -133,24 +147,25 @@ public class ArticleEditorPane extends JPanel {
 	}
 	
 	public void setArticle(Article a) {
-		currentArticle = a;
-		
 		if(a == null) {
 			title.setEnabled(false);
 			authors.setEnabled(false);
 			content.setEnabled(false);
 			authors.setSelectedItem(null);
+			modify.setEnabled(false);
 			updateTime(null, null);
 		} else {
-			title.setEnabled(true);
-			authors.setEnabled(true);
-			content.setEnabled(true);
-			
 			title.setText(a.getTitle());
 			authors.setSelectedItem(a.getAuthor());
 			content.setText(a.getContent());
 			updateTime(a.getCreated(), a.getLastEdited());
+
+			title.setEnabled(false);
+			authors.setEnabled(false);
+			content.setEnabled(false);
+			modify.setEnabled(true);
 		}
+		currentArticle = a;
 	}
 	
 	/** 
