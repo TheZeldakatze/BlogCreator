@@ -3,6 +3,7 @@ package de.victorswelt;
 import java.util.Date;
 
 public class Article {
+	private String fileName;
 	private Date created, lastEdited;
 	private Author author;
 	private String title;
@@ -13,9 +14,10 @@ public class Article {
 		
 	}
 	
-	public Article(Author author, String title, Date created, Date edited, String content) {
+	public Article(String fileName, Author author, String title, Date created, Date edited, String content) {
 		this();
 		
+		this.fileName = fileName;
 		this.author = author;
 		this.title = title;
 		this.created = created;
@@ -23,6 +25,9 @@ public class Article {
 		this.content = content;
 	}
 	
+	public String getFileName() {
+		return fileName;
+	}
 	public String getTitle() {
 		return title;
 	}

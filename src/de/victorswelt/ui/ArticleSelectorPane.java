@@ -58,8 +58,22 @@ public class ArticleSelectorPane extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int filenameNumber = ArticleList.getInstance().getArticles().size();
+				boolean nameIsUnique = false;
+				while(!nameIsUnique) {
+					nameIsUnique = true;
+					for(Article comp : ArticleList.getInstance().getArticles()) {
+						if(comp.getFileName() == "" + filenameNumber) {
+							nameIsUnique = false;
+							filenameNumber++;
+							break;
+						}
+					}
+				}
+
+				String filename = "" + filenameNumber;
 				Date d = new Date();
-				Article a = new Article(AuthorList.NO_AUTHOR, "New Article", d, new Date(d.getTime()), "");
+				Article a = new Article(filename, AuthorList.NO_AUTHOR, "New Article", d, new Date(d.getTime()), "");
 				ArticleList.getInstance().addArticle(a);
 				listModel.addElement(a);
 			}

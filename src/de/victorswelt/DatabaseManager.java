@@ -2,6 +2,9 @@ package de.victorswelt;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +16,36 @@ public class DatabaseManager {
 	
 	private DatabaseManager() {
 		load(new File("website/website.bcp"));
+	}
+	
+	public void save() {
+		
+		// save every article that was changed
+		for(Article a : ArticleList.getInstance().getArticles()) {
+			if(a.wasEdited()) {
+				Properties p = new Properties();
+				
+				// collect the information
+				p.setProperty("title", a.getTitle());
+				p.setProperty("author", "" + AuthorList.getInstance().getID(a.getAuthor()));
+				p.setProperty("created", DATE_FORMAT.format(a.getCreated()));
+				p.setProperty("modified", DATE_FORMAT.format(a.getLastEdited()));
+				p.setProperty("content", a.getContent());
+				
+				// save the properties to a file
+				File f = new File(articleFolder, a.getFileName());
+				try {
+					FileOutputStream fos = new FileOutputStream(f);
+					p.store(fos, null);
+					fos.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
 	}
 	
 	private void load(File infoFile) {
@@ -53,7 +86,7 @@ public class DatabaseManager {
 			String content = p.getProperty("content");
 			
 			// create an object
-			ArticleList.getInstance().addArticle(new Article(author, title, created, modified, content));
+			ArticleList.getInstance().addArticle(new Article(f.getName(), author, title, created, modified, content));
 			
 		} catch(NumberFormatException e) {
 			System.out.println("Error loading article! Can't read author id (File name:  \"" + f.getName() + "\"). Printing stack trace:");
