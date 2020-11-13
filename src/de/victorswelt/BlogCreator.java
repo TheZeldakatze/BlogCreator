@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 import de.victorswelt.ui.ArticleEditorPane;
 import de.victorswelt.ui.ArticleSelectorPane;
+import de.victorswelt.ui.FSOperationPane;
 
 public class BlogCreator {
 	public static void main(String args[]) {
@@ -20,6 +21,7 @@ public class BlogCreator {
 	public BlogCreator() {
 		ArticleEditorPane editorPane = new ArticleEditorPane();
 		ArticleSelectorPane selectorPane = new ArticleSelectorPane(editorPane);
+		FSOperationPane fsOperationPane = new FSOperationPane();
 		
 		JFrame editorFrame = new JFrame("Blog Creator");
 		editorFrame.setSize(640, 480);
@@ -34,5 +36,10 @@ public class BlogCreator {
 		selectorFrame.add(selectorPane);
 		selectorFrame.setVisible(true);
 		selectorFrame.setLocationRelativeTo(editorFrame);
+		
+		JFrame fsOperatorFrame = new JFrame("Blog Creator - File Operations");
+		fsOperatorFrame.add(fsOperationPane);
+		fsOperatorFrame.pack();
+		fsOperatorFrame.setVisible(true);
 	}
 }
