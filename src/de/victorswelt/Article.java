@@ -25,7 +25,23 @@ public class Article {
 		this.content = content;
 	}
 	
-	public String getFileName() {
+	
+	
+	public String getOrCreateFileName() {
+		// if no file name was yet created, create one now
+		if(fileName == null) {
+			fileName = title.replace(" ", "-");
+			
+			// change the file name until it's unique
+			if(!ArticleList.getInstance().isNameUnique(fileName)) {
+				int i = 0;
+				while (!ArticleList.getInstance().isNameUnique(fileName + i)) {
+					i++;
+				}
+				fileName = fileName + i;
+			}
+		}
+		
 		return fileName;
 	}
 	public String getTitle() {
@@ -77,5 +93,11 @@ public class Article {
 	private void updateEditedTime() {
 		edited = true;
 		lastEdited.setTime(System.currentTimeMillis());
+	}
+	
+	/**
+	 * Returns the filename without creating one if the value is null */
+	public String getFileName() {
+		return fileName;
 	}
 }

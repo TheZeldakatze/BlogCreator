@@ -8,6 +8,8 @@ import de.victorswelt.ui.ArticleSelectorPane;
 import de.victorswelt.ui.FSOperationPane;
 
 public class BlogCreator {
+	public static final boolean DOS_FS_COMPATEBILITY = false;
+	
 	public static void main(String args[]) {
 		// initialize the singletons
 		AuthorList.init();

@@ -33,7 +33,7 @@ public class DatabaseManager {
 				p.setProperty("content", a.getContent());
 				
 				// save the properties to a file
-				File f = new File(articleFolder, a.getFileName());
+				File f = new File(articleFolder, a.getOrCreateFileName());
 				try {
 					FileOutputStream fos = new FileOutputStream(f);
 					p.store(fos, null);

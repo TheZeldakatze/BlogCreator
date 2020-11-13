@@ -23,6 +23,15 @@ public class ArticleList {
 		return articleList;
 	}
 	
+	public boolean isNameUnique(String name) {
+		for(Article a : articleList) {
+			if(name.equalsIgnoreCase(a.getFileName()))
+				return false;
+		}
+		
+		return true;
+	}
+	
 	private static ArticleList INSTANCE;
 	public static void init() {
 		INSTANCE = new ArticleList();
